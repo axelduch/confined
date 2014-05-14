@@ -1,0 +1,29 @@
+{
+  "name": "confined",
+  "version": "0.0.0",
+  "description": "confined ========",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/axelduch/confined.git"
+  },
+  "keywords": [
+    "confined",
+    "game",
+    "javascript"
+  ],
+  "author": "axel duch",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/axelduch/confined/issues"
+  },
+  "homepage": "https://github.com/axelduch/confined",
+  "devDependencies": {
+    "gulp": "^3.6.2",
+    "gulp-browserify": "^0.5.0",
+    "browserify": "^4.1.2"
+  }
+}
