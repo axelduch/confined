@@ -1,39 +1,43 @@
 'use strict';
 
 var PIXI = require('pixi'),
+    assets = require('./assets.js'),
+    Hero = require('./hero.js'),
     stage,
     renderer,
     hero,
     texture,
-    width = 400,
-    height = 300,
+    width = 800,
+    height = 600,
     animate,
+    loader = new PIXI.AssetLoader(assets.array),
     requestAnimationFrame = window.requestAnimationFrame;
 
-texture = PIXI.Texture.fromImage('../assets/hero.png');
-hero = new PIXI.Sprite(texture);
+loader.onComplete = onAssetsLoaded;
+loader.load();
 
-stage = new PIXI.Stage(0xAAFFAA);
-renderer = PIXI.autoDetectRenderer(width, height);
+function onAssetsLoaded() {
+    console.log('loaded');
+    stage = new PIXI.Stage(0xAAFF);
+    renderer = PIXI.autoDetectRenderer(width, height);
 
-document.body.appendChild(renderer.view);
+    document.body.appendChild(renderer.view);
 
-requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
 
-hero.width = 100;
-hero.height = 100;
+    var hero = new Hero();
+    hero.width = 100;
+    hero.height = 100;
 
-console.log(hero.width);
-
-hero.anchor.x = 0.5;
-hero.anchor.y = 0.5;
+    hero.anchor.x = 0.5;
+    hero.anchor.y = 0.5;
 
 
-hero.position.x = width >> 1;
-hero.position.y = height >> 1;
+    hero.position.x = width >> 1;
+    hero.position.y = height >> 1;
 
-stage.addChild(hero);
-
+    stage.addChild(hero);
+}
 
 function animate() {
     requestAnimationFrame(animate);
