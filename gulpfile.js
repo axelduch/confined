@@ -1,6 +1,7 @@
 var gulp = require('gulp'),
     watch = require('gulp-watch'),
     browserify = require('gulp-browserify'),
+    livereload = require('gulp-livereload'),
     paths;
 
 paths = {
@@ -11,6 +12,7 @@ paths = {
 gulp.task('browserify', function () {
     gulp.src(paths.scripts)
         .pipe(browserify().on('error', function (e) { console.log('Browserify has failed', e); }))
+        .pipe(livereload())
         .pipe(gulp.dest('./dist/js'))
 });
 
