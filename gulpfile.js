@@ -9,9 +9,9 @@ paths = {
 };
 
 gulp.task('browserify', function () {
-    gulp.src('./src/js/index.js')
-        .pipe(browserify())
-        .pipe(gulp.dest('./dist/js'));
+    gulp.src(paths.scripts)
+        .pipe(browserify().on('error', function (e) { console.log('Browserify has failed', e); }))
+        .pipe(gulp.dest('./dist/js'))
 });
 
 gulp.task('index.html', function () {
