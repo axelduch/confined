@@ -1,7 +1,8 @@
 'use strict';
 
 var assetsShortHandArray = [
-        'hero.png'
+        'hero.png',
+        'hero_attack.png'
     ],
     assetsArray = assetsShortHandArray.map(function (path) {
         return '../assets/' + path;
