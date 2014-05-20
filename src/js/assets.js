@@ -2,7 +2,8 @@
 
 var assetsShortHandArray = [
         'hero.png',
-        'hero_attack.png'
+        'hero_attack.png',
+        'ground.png'
     ],
     assetsArray = assetsShortHandArray.map(function (path) {
         return '../assets/' + path;
@@ -16,4 +17,4 @@ assetsArray.forEach(function (path, key) {
 module.exports = {
     array: assetsArray,
     hash: assetsHash
-}
+};
