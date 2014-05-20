@@ -4,10 +4,10 @@ var PIXI = require('pixi'),
     Camera;
 
 Camera = function Camera() {
-    PIXI.DisplayObjectContainer.call(this);
+    PIXI.Point.call(this);
 };
 
-Camera.prototype = Object.create(PIXI.DisplayObjectContainer, {
+Camera.prototype = Object.create(PIXI.Point, {
     constructor: Camera
 });
 
