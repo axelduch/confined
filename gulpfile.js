@@ -11,28 +11,29 @@ paths = {
 };
 
 gulp.task('jshint', function () {
-    gulp.src(paths.scripts)
+    return gulp.src(paths.scripts)
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
 
 gulp.task('browserify', function () {
-    gulp.src(paths.scripts)
-        .pipe(browserify().on('error', function (e) { console.log('Browserify has failed'); }))
+    return gulp.src(paths.scripts)
+        .pipe(browserify().on('error', function (e) { console.log('Browserify has failed\n', e); }))
         .pipe(gulp.dest('./dist/js'))
 });
 
-gulp.task('livereload', function () {
-    gulp.src(paths.scripts)
+gulp.task('livereload', ['browserify'], function () {
+    return gulp.src(paths.scripts)
         .pipe(livereload());
 });
 
 gulp.task('index.html', function () {
-    gulp.src('src/index.html')
+    return gulp.src('src/index.html')
         .pipe(gulp.dest('./dist'));
 });
 
 gulp.task('default', function () {
+    livereload();
     gulp.watch(paths.html, ['index.html', 'livereload']);
     gulp.watch(paths.scripts, ['browserify', 'livereload', 'jshint']);
 });
