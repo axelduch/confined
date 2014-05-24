@@ -1,6 +1,6 @@
 'use strict';
 
-var PIXI = require('pixi'),
+var PIXI = require('pixi.js'),
     assets = require('./assets'),
     Ground;
 
@@ -10,7 +10,7 @@ Ground = function Ground() {
     ];
 
     PIXI.MovieClip.call(this, textures);
-    this.hitArea = new PIXI.Rectangle(0, this.height * 0.75, this.width, this.height * 0.5);
+    this.hitArea = new PIXI.Rectangle(0, this.height * 0.5, this.width, this.height * 0.5);
 };
 
 Ground.prototype = Object.create(PIXI.MovieClip.prototype, {
