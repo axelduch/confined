@@ -1,6 +1,6 @@
 'use strict';
 
-var PIXI = require('pixi'),
+var PIXI = require('pixi.js'),
     Vector = require('./physics/Vector.js'),
     assets = require('./assets.js'),
     Hero;
@@ -13,7 +13,10 @@ Hero = function Hero() {
 
     PIXI.MovieClip.call(this, textures);
 
+    this.forceStep = 3;
+    this.force = new Vector();
     this.acceleration = new Vector();
+    this.filters = [new PIXI.GrayFilter()];
 };
 
 Hero.prototype = Object.create(PIXI.MovieClip.prototype, {
@@ -21,11 +24,27 @@ Hero.prototype = Object.create(PIXI.MovieClip.prototype, {
 });
 
 Hero.prototype.move  = function (game) {
+    if (!this.ownSpeedLimitReached && game.IS_MOVING_LEFT) {
+        this.force.x = -this.forceStep;
+    }
+
+    if (!this.ownSpeedLimitReached && game.IS_MOVING_RIGHT) {
+        this.force.x = this.forceStep;
+    }
+
+    this.acceleration.x += this.force.x;
+    this.acceleration.y += this.force.y;
+
     this.position.x += this.acceleration.x;
 
-    if (game.IS_JUMPING) {
+    if (game.IN_THE_AIR) {
         this.position.y += this.acceleration.y;
     }
+
+};
+
+Hero.prototype.jump = function () {
+    this.force.y -= this.forceStep;
 };
 
 Hero.prototype.attack = function () {
@@ -33,8 +52,31 @@ Hero.prototype.attack = function () {
 };
 
 Hero.prototype.update = function (game) {
+    if (game.IS_ATTACKING === false) {
+        this.gotoAndStop(0);
+    }
+
+    this.ownSpeedLimitReached = Math.abs(game.hero.acceleration.x) >= 5;
+    this.acceleration.x *= game.physics.friction;
+
+    if (this.position.y - (this.height >> 1) >= game.ground.hitArea.y) {
+        this.acceleration.y = 0;
+        this.position.y = game.ground.hitArea.y + (this.height >> 1);
+        console.log('on the ground !');
+
+        if (game.UP_KEY) {
+            this.jump();
+        }
+    }
+
     this.move(game);
-    this.acceleration.x = 0;
+
+    game.camera.notify();
+    this.clearForce();
+};
+
+Hero.prototype.clearForce = function () {
+    this.force.x = this.force.y = 0;
 };
 
 module.exports = Hero;

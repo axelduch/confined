@@ -3,18 +3,28 @@
 var KeyboardJS = require('keyboardjs');
 
 module.exports = function (game) {
-    var speed = 5;
-
     game.stage.mousedown = function () {
+        game.IS_ATTACKING = true;
         game.hero.attack();
     };
     game.stage.mouseup = function () {
-        game.hero.gotoAndStop(0);
+        game.IS_ATTACKING = false;
     };
     KeyboardJS.on('d', function () {
-        game.hero.acceleration.x = speed;
+        game.IS_MOVING_RIGHT = true;
+        game.IS_MOVING_LEFT = false;
+    }, function () {
+        game.IS_MOVING_RIGHT = false;
     });
     KeyboardJS.on('q', function () {
-        game.hero.acceleration.x = -speed;
+        game.IS_MOVING_LEFT = true;
+        game.IS_MOVING_RIGHT = false;
+    }, function () {
+        game.IS_MOVING_LEFT = false;
+    });
+    KeyboardJS.on('space', function () {
+        game.UP_KEY = true;
+    }, function () {
+        game.UP_KEY = false;
     });
 };
