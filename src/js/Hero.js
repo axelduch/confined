@@ -16,7 +16,8 @@ Hero = function Hero() {
     this.forceStep = 3;
     this.force = new Vector();
     this.acceleration = new Vector();
-    this.filters = [new PIXI.GrayFilter()];
+    this.blurFilter = new PIXI.BlurFilter();
+    this.filters = [this.blurFilter];
 };
 
 Hero.prototype = Object.create(PIXI.MovieClip.prototype, {
@@ -24,6 +25,9 @@ Hero.prototype = Object.create(PIXI.MovieClip.prototype, {
 });
 
 Hero.prototype.move  = function (game) {
+    this.blurFilter.blurX = this.acceleration.x;
+    this.blurFilter.blurY = this.acceleration.y * 30;
+
     if (!this.ownSpeedLimitReached && game.IS_MOVING_LEFT) {
         this.force.x = -this.forceStep;
     }
@@ -36,6 +40,14 @@ Hero.prototype.move  = function (game) {
     this.acceleration.y += this.force.y;
 
     this.position.x += this.acceleration.x;
+
+    var offset = this.width * this.anchor.x;
+
+    if (this.position.x - offset < 0) {
+        this.position.x = offset;
+    } else if (this.position.x > game.ground.width - offset) {
+        this.position.x = game.ground.width - offset;
+    }
 
     if (game.IN_THE_AIR) {
         this.position.y += this.acceleration.y;
@@ -62,7 +74,6 @@ Hero.prototype.update = function (game) {
     if (this.position.y - (this.height >> 1) >= game.ground.hitArea.y) {
         this.acceleration.y = 0;
         this.position.y = game.ground.hitArea.y + (this.height >> 1);
-        console.log('on the ground !');
 
         if (game.UP_KEY) {
             this.jump();
