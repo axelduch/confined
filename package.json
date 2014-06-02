@@ -30,6 +30,7 @@
     "gulp-watch": "^0.6.4",
     "keyboardjs": "^0.4.2",
     "gulp-rename": "^1.2.0",
-    "pixi.js": "^1.5.2"
+    "pixi.js": "^1.5.2",
+    "express": "^4.4.0"
   }
 }
