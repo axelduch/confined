@@ -16,6 +16,9 @@ var PIXI = require('pixi.js'),
     animate,
     loader = new PIXI.AssetLoader(assets.array),
     requestAnimationFrame = window.requestAnimationFrame,
+    time,
+    dt = 0,
+    speed = 0.08,
     game;
 
 loader.onComplete = onAssetsLoaded;
@@ -76,6 +79,8 @@ function onAssetsLoaded() {
             forces: [gravity],
             forcesSubscribers: [hero]
         },
+        dt: 0,
+        speed: speed,
         toUpdate: [hero]
     };
 
@@ -85,14 +90,10 @@ function onAssetsLoaded() {
 }
 
 function animate() {
-    var a1, a2, i, j, k, l;
+    var a1, i, l, now;
+    console.clear();
 
-    // apply each force to each force subscriber
-    for (i = 0, a1 = game.physics.forces, l = a1.length; i < l; ++i) {
-        for (j = 0, a2 = game.physics.forcesSubscribers, k = a2.length; j < k; ++j) {
-            a2[j].acceleration.add(a1[i]);
-        }
-    }
+    applyPhysics();
 
     for (i = 0, a1 = game.toUpdate, l = a1.length; i < l; ++i) {
         a1[i].update(game);
@@ -101,5 +102,22 @@ function animate() {
     game.IN_THE_AIR = ((game.hero.position.y - game.hero.height * 0.5) < game.ground.hitArea.y);
 
     requestAnimationFrame(animate);
+
+    now = +new Date();
+    dt = now - (time || now);
+
+    time = now;
+
+    game.dt = dt;
     renderer.render(stage);
+}
+
+function applyPhysics() {
+    var a1, a2, i, j, k, l;
+    // apply each force to each force subscriber
+    for (i = 0, a1 = game.physics.forces, l = a1.length; i < l; ++i) {
+        for (j = 0, a2 = game.physics.forcesSubscribers, k = a2.length; j < k; ++j) {
+            a2[j].acceleration.add(a1[i]);
+        }
+    }
 }

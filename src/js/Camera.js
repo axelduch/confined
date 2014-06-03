@@ -33,7 +33,6 @@ Camera = function Camera(game) {
 
             scene.position.x = this.x - game.hero.position.x * scene.scale.x;
             scene.position.y = this.y - game.hero.position.y * scene.scale.y;
-            console.clear();
             if (scene.position.x * scene.scale.x > 0) {
                 scene.position.x = 0;
             }
@@ -62,8 +61,8 @@ Camera.prototype.notify = function notify() {
         distScroll = 10000 - c.scrollIteration,
         distZoom = 10000 - c.zoomIteration;
 
-    this.x = Math.cos((c.scrollIteration = (c.scrollIteration + distScroll * 0.000009) % 10000) * 0.05) * this.game.hero.position.x * 0.1 + this.game.width * 0.5;
-    this.scale = 0.2 * Math.abs(Math.sin((c.zoomIteration = (c.zoomIteration + distZoom * 0.000002) % 10000) * 0.5)) + this.focus;
+    this.x = Math.cos((c.scrollIteration = (c.scrollIteration + distScroll * 0.000003) % 10000) * 0.05) * this.game.hero.position.x * 0.03 + this.game.width * 0.5;
+    this.scale = 0.2 * Math.abs(Math.sin((c.zoomIteration = (c.zoomIteration + distZoom * 0.000002 * this.game.speed) % 10000) * 0.5)) + this.focus;
 };
 
 module.exports = Camera;

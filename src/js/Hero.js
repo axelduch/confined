@@ -13,7 +13,7 @@ Hero = function Hero() {
 
     PIXI.MovieClip.call(this, textures);
 
-    this.forceStep = 3;
+    this.forceStep = 5;
     this.force = new Vector();
     this.acceleration = new Vector();
     this.blurFilter = new PIXI.BlurFilter();
@@ -25,8 +25,11 @@ Hero.prototype = Object.create(PIXI.MovieClip.prototype, {
 });
 
 Hero.prototype.move  = function (game) {
-    this.blurFilter.blurX = this.acceleration.x;
-    this.blurFilter.blurY = this.acceleration.y * 30;
+    var dt = game.dt,
+        speed = game.speed;
+
+    this.blurFilter.blurX = this.acceleration.x * speed;
+    this.blurFilter.blurY = this.acceleration.y * 30 * speed;
 
     if (!this.ownSpeedLimitReached && game.IS_MOVING_LEFT) {
         this.force.x = -this.forceStep;
@@ -36,10 +39,10 @@ Hero.prototype.move  = function (game) {
         this.force.x = this.forceStep;
     }
 
-    this.acceleration.x += this.force.x;
-    this.acceleration.y += this.force.y;
+    this.acceleration.x += this.force.x * dt;
+    this.acceleration.y += this.force.y * dt;
 
-    this.position.x += this.acceleration.x;
+    this.position.x += this.acceleration.x * dt * speed;
 
     var offset = this.width * this.anchor.x;
 
@@ -50,13 +53,14 @@ Hero.prototype.move  = function (game) {
     }
 
     if (game.IN_THE_AIR) {
-        this.position.y += this.acceleration.y;
+        console.log('Acceleration y: ', this.acceleration.y, '\ndt: ', dt, '\nspeed: ', speed);
+        this.position.y += this.acceleration.y * dt * speed;
     }
 
 };
 
 Hero.prototype.jump = function () {
-    this.force.y -= this.forceStep;
+    this.force.y = -this.forceStep;
 };
 
 Hero.prototype.attack = function () {
@@ -64,6 +68,8 @@ Hero.prototype.attack = function () {
 };
 
 Hero.prototype.update = function (game) {
+    var dt = game.dt;
+
     if (game.IS_ATTACKING === false) {
         this.gotoAndStop(0);
     }
