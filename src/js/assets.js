@@ -3,7 +3,8 @@
 var assetsShortHandArray = [
         'hero.png',
         'hero_attack.png',
-        'ground.png'
+        'ground.png',
+        'weapon.png'
     ],
     assetsArray = assetsShortHandArray.map(function (path) {
         return '../assets/' + path;
