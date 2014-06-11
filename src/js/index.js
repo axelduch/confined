@@ -18,7 +18,7 @@ var PIXI = require('pixi.js'),
     requestAnimationFrame = window.requestAnimationFrame,
     time,
     dt = 0,
-    speed = 0.08,
+    speed = 0.1,
     game;
 
 loader.onComplete = onAssetsLoaded;
@@ -91,7 +91,6 @@ function onAssetsLoaded() {
 
 function animate() {
     var a1, i, l, now;
-    console.clear();
 
     applyPhysics();
 
