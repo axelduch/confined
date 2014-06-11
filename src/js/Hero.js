@@ -2,6 +2,7 @@
 
 var PIXI = require('pixi.js'),
     Vector = require('./physics/Vector.js'),
+    Weapon = require('./Weapon.js'),
     assets = require('./assets.js'),
     Hero;
 
@@ -14,6 +15,7 @@ Hero = function Hero() {
     PIXI.MovieClip.call(this, textures);
 
     this.forceStep = 5;
+    this.weapon = new Weapon();
     this.force = new Vector();
     this.acceleration = new Vector();
     this.blurFilter = new PIXI.BlurFilter();
@@ -39,10 +41,10 @@ Hero.prototype.move  = function (game) {
         this.force.x = this.forceStep;
     }
 
-    this.acceleration.x += this.force.x * dt;
-    this.acceleration.y += this.force.y * dt;
+    this.acceleration.x += this.force.x;
+    this.acceleration.y += this.force.y;
 
-    this.position.x += this.acceleration.x * dt * speed;
+    this.position.x += this.acceleration.x;
 
     var offset = this.width * this.anchor.x;
 
@@ -53,8 +55,7 @@ Hero.prototype.move  = function (game) {
     }
 
     if (game.IN_THE_AIR) {
-        console.log('Acceleration y: ', this.acceleration.y, '\ndt: ', dt, '\nspeed: ', speed);
-        this.position.y += this.acceleration.y * dt * speed;
+        this.position.y += this.acceleration.y;
     }
 
 };
@@ -75,14 +76,14 @@ Hero.prototype.update = function (game) {
     }
 
     this.ownSpeedLimitReached = Math.abs(game.hero.acceleration.x) >= 5;
-    this.acceleration.x *= game.physics.friction;
+    this.acceleration.x *= game.physics.friction * game.speed;
 
     if (this.position.y - (this.height >> 1) >= game.ground.hitArea.y) {
         this.acceleration.y = 0;
         this.position.y = game.ground.hitArea.y + (this.height >> 1);
 
         if (game.UP_KEY) {
-            this.jump();
+            this.jump(speed);
         }
     }
 
@@ -92,7 +93,7 @@ Hero.prototype.update = function (game) {
     this.clearForce();
 };
 
-Hero.prototype.clearForce = function () {
+Hero.prototype.clearForce = function (speed) {
     this.force.x = this.force.y = 0;
 };
 
